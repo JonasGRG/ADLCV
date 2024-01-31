@@ -1,0 +1,7 @@
+data/
+.data/
+
+.DS_Store
+
+Pipfile
+Pipfile.lock
