@@ -44,7 +44,7 @@ def prepare_data_iter(sampled_ratio=0.2, batch_size=16):
 
 def main(args):
     # Set up the data iterator with arguments
-    train_iter, test_iter = prepare_data_iter(sampled_ratio=args.sampled_ratio, 
+    train_iter, test_iter = prepare_data_iter(sampled_ratio=SAMPLED_RATIO, 
                                               batch_size=args.batch_size)
 
     # Create the model with specified arguments
