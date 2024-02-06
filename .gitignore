@@ -1,7 +1,7 @@
 data/
 .data/
-
+*.pyc
 .DS_Store
 
 Pipfile
-Pipfile.lock
+Pipfile.lockw
