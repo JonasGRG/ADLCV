@@ -100,8 +100,11 @@ class ViT(nn.Module):
         patch_h, patch_w = patch_size
         assert H % patch_h == 0 and W % patch_w == 0, 'Image dimensions must be divisible by the patch size'
 
-        num_patches = (H // patch_h) * (W // patch_w)
         patch_dim = channels * patch_h * patch_w
+
+        num_patches_h = H // patch_h
+        num_patches_w = W // patch_w
+        num_patches = num_patches_h*num_patches_w
 
         if self.pool == 'cls':
             self.cls_token = nn.Parameter(torch.rand(1,1,embed_dim))
@@ -121,6 +124,18 @@ class ViT(nn.Module):
         #
         #
         #################################
+            
+        self.to_patch_embedding = nn.Sequential(
+            Rearrange('B C (num_patches_h patch_h) (num_patches_w patch_w) -> B C num_patches_h patch_h num_patches_w patch_w',
+                    num_patches_h=num_patches_h,
+                    num_patches_w=num_patches_w,
+                    patch_h=patch_h,
+                    patch_w=patch_w),
+            Rearrange('B C num_patches_h patch_h num_patches_w patch_w -> B (num_patches_h num_patches_w) (C patch_h patch_w)'),
+            nn.LayerNorm(patch_dim),
+            nn.Linear(patch_dim, embed_dim),
+            nn.LayerNorm(embed_dim),
+        )
 
         if self.pos_enc == 'learnable':
             self.positional_embedding = nn.Parameter(torch.randn(1, num_patches, embed_dim))

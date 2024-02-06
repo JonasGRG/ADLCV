@@ -128,7 +128,7 @@ def main(image_size=(32,32), patch_size=(4,4), channels=3,
 
 
 if __name__ == "__main__":
-    #os.environ["CUDA_VISIBLE_DEVICES"]= str(0)
+    os.environ["CUDA_VISIBLE_DEVICES"]= str(0)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  
     print(f"Model will run on {device}")
     set_seed(seed=1)

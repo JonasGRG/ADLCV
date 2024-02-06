@@ -4,4 +4,4 @@ data/
 .DS_Store
 
 Pipfile
-Pipfile.lockw
+Pipfile.lock
