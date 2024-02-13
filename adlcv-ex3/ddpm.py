@@ -93,7 +93,7 @@ class Diffusion:
         
         # HINT: Having calculated the mean and std of p(x{x_t} | x_t), we sample noise from a normal distribution.
         # see line 3 of the Algorithm 2 (Sampling) at page 4 of the ddpm paper.
-        noise = torch.randn_like(x_t) if t>1 else 0
+        noise = torch.randn_like(x_t) if torch.all(t > 1) else torch.zeros_like(x_t)
 
         # Calculate x_{t-1}, see line 4 of the Algorithm 2 (Sampling) at page 4 of the ddpm paper.
         x_t_prev = mean + std * noise
