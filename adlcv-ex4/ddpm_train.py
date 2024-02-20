@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+import random
 
 import torch
 import torch.nn.functional as F
@@ -66,6 +67,7 @@ def train(T=500, cfg=True, img_size=16, input_channels=3, channels=32,
     l = len(train_loader)
 
     min_train_loss = 1e10
+    p_uncod = 0.1
     for epoch in range(1, num_epochs + 1):
         logging.info(f"Starting epoch {epoch}:")
         pbar = tqdm(train_loader)
@@ -73,7 +75,7 @@ def train(T=500, cfg=True, img_size=16, input_channels=3, channels=32,
         for i, (images, labels) in enumerate(pbar):
             images = images.to(device)
 
-            if diff_type == 'DDPM-cFg':
+            if diff_type == 'DDPM-cFg' and np.random.rand > p_uncod:
                 # one-hot encode labels for classifier-free guidance
                 labels = labels.to(device)
                 labels = F.one_hot(labels, num_classes=num_classes).float()
@@ -82,14 +84,11 @@ def train(T=500, cfg=True, img_size=16, input_channels=3, channels=32,
 
             # Train a diffusion model with classifier-free guidance
             # Do not forget randomly discard labels
-            p_uncod = 0.1
 
-            ...
-
-            t = ...
-            x_t, noise = ...
-            predicted_noise = ...
-            loss = ...
+            t = diffusion.sample_timesteps(images.shape[0]).to(device) # line 3 from the Training algorithm
+            x_t, noise = diffusion.q_sample(images, t) # inject noise to the images (forward process), HINT: use q_sample
+            predicted_noise = model(x_t, t, labels) # predict noise of x_t using the UNet
+            loss = mse(predicted_noise, noise) # loss between noise and predicted noise
 
             optimizer.zero_grad()
             loss.backward()
