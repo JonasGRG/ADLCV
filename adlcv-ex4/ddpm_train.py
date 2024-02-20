@@ -75,7 +75,7 @@ def train(T=500, cfg=True, img_size=16, input_channels=3, channels=32,
         for i, (images, labels) in enumerate(pbar):
             images = images.to(device)
 
-            if diff_type == 'DDPM-cFg' and np.random.rand > p_uncod:
+            if diff_type == 'DDPM-cFg' and np.random.rand() > p_uncod:
                 # one-hot encode labels for classifier-free guidance
                 labels = labels.to(device)
                 labels = F.one_hot(labels, num_classes=num_classes).float()
