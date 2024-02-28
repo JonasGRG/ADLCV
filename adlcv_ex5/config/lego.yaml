@@ -1,0 +1,29 @@
+expname: lego
+datadir: ./data/nerf_synthetic/lego
+target_size: 50       # image resolution
+
+# Embedders
+n_freqs: 10           # Number of encoding functions for samples
+log_space: True       # If set, frequencies scale in log space
+use_viewdirs: True    # If set, use view direction as input
+n_freqs_views: 4      # Number of encoding functions for views
+
+# model
+hidden_dim: 256
+n_layers: 8           # Number of layers in network bottleneck
+n_layers_fine: 8      # Number of layers in fine network bottleneck
+
+# Stratified sampling
+n_samples: 64
+perturb: True
+# Hierarchical sampling
+n_samples_hierarchical: 64   # Number of samples per ray
+
+# Training
+n_iters: 10000
+batch_size: 2**14          # Number of rays per gradient step (power of 2)
+chunksize: 2**14           # Modify as needed to fit in GPU memory
+display_rate: 500          # Display test output every X iters
+lr: 5e-4
+center_crop: True
+center_crop_iters: 50
